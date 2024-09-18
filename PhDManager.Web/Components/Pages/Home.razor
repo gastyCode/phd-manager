@@ -2,6 +2,16 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<AuthorizeView>
+    <Authorized>
+        <RadzenText TextStyle="TextStyle.Body1">Welcome, you are logged in as <b>@HttpContext.User.Identity?.Name</b></RadzenText>
+    </Authorized>
+    <NotAuthorized>
+        <RadzenText TextStyle="TextStyle.Body1">You are not logged in. <a href="/login" class="underline hover:opacity-80">Click here to log in.</a></RadzenText>
+    </NotAuthorized>
+</AuthorizeView>
 
-Welcome to your new app.
+@code {
+    [CascadingParameter]
+    public HttpContext HttpContext { get; set; }
+}

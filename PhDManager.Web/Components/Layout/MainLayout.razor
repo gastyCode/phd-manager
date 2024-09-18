@@ -5,8 +5,20 @@
 <RadzenLayout>
     <RadzenHeader>
         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-            <RadzenSidebarToggle Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
-            <RadzenLabel Text="PhD Manager" />
+            <RadzenRow JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width: 100%;">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+                    <RadzenSidebarToggle Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
+                    <RadzenLabel Text="PhD Manager" />
+                </RadzenStack>
+                    <AuthorizeView>
+                        <Authorized>
+                            <RadzenLink Path="/logout">Log out</RadzenLink>
+                        </Authorized>
+                        <NotAuthorized>
+                            <RadzenLink Path="/login">Log in</RadzenLink>
+                        </NotAuthorized>
+                    </AuthorizeView>
+            </RadzenRow>
         </RadzenStack>
     </RadzenHeader>
     <RadzenSidebar @bind-Expanded="@_sidebarExpanded">
@@ -23,6 +35,6 @@
     </RadzenBody>
 </RadzenLayout>
 
-@code {
+@code { 
     private bool _sidebarExpanded = true;
 }

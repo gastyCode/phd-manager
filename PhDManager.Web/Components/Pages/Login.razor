@@ -1,0 +1,55 @@
+﻿@page "/login"
+
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Authentication
+@using PhDManager.Core.IServices
+@using PhDManager.Core.ValidationModels
+@using System.Security.Claims
+
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Log in</PageTitle>
+
+<RadzenText TextStyle="TextStyle.H3">Login</RadzenText>
+
+<EditForm Model="UserLogin" FormName="login" OnSubmit="HandleSubmit">
+    <RadzenStack>
+        <RadzenLabel For="@((UserLogin user) => user.Upn)" Text="Upn" Component="Upn" />
+        <RadzenTextBox @bind-Value="@UserLogin.Upn" Name="Upn" />
+
+        <RadzenLabel For="@((UserLogin user) => user.Password)" Text="Password" Component="Password" />
+        <RadzenPassword @bind-Value="@UserLogin.Password" Name="Password" />
+
+
+        <RadzenButton Text="Login" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" />
+    </RadzenStack>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    public HttpContext HttpContext { get; set; }
+
+    [SupplyParameterFromForm]
+    private UserLogin? UserLogin { get; set; }
+
+    protected override void OnInitialized() => UserLogin ??= new();
+
+    public async Task HandleSubmit()
+    {
+        var result = await UserService.AuthenticateUser(UserLogin.Upn, UserLogin.Password);
+        if (result is not null)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, result.Upn),
+                new Claim(ClaimTypes.Role, result.Role)
+            };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}
