@@ -4,34 +4,46 @@
 
 <RadzenLayout>
     <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-            <RadzenRow JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width: 100%;">
+        <RadzenStack style="height: 100%" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0">
+            <RadzenRow class="rz-p-1" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width: 100%;">
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-                    <RadzenSidebarToggle Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
-                    <RadzenLabel Text="PhD Manager" />
+
+                    <AuthorizeView>
+                        <Authorized>
+                            <RadzenSidebarToggle Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
+                        </Authorized>
+                    </AuthorizeView>
+
+                    <RadzenLink Text="PhD Manager" Path="/" />
                 </RadzenStack>
                     <AuthorizeView>
                         <Authorized>
-                            <RadzenLink Path="/logout">Log out</RadzenLink>
+                            <RadzenMenu>
+                                <RadzenMenuItem Text="@context.User.Identity?.Name">
+                                    <RadzenMenuItem Text="Log out" Path="logout"></RadzenMenuItem>
+                                </RadzenMenuItem>
+                            </RadzenMenu>
                         </Authorized>
                         <NotAuthorized>
-                            <RadzenLink Path="/login">Log in</RadzenLink>
+                            <RadzenLink class="rz-mx-2" Path="/login">Log in</RadzenLink>
                         </NotAuthorized>
                     </AuthorizeView>
             </RadzenRow>
         </RadzenStack>
     </RadzenHeader>
-    <RadzenSidebar @bind-Expanded="@_sidebarExpanded">
-        <RadzenPanelMenu>
-            <RadzenPanelMenuItem Path="" Text="Home" Icon="home" />
-            <RadzenPanelMenuItem Path="counter" Text="Counter" Icon="plus_one" />
-            <RadzenPanelMenuItem Path="weather" Text="Weather" Icon="cloud_download" />
-        </RadzenPanelMenu>
-    </RadzenSidebar>
-    <RadzenBody>
-        <div class="rz-p-4">
-            @Body
-        </div>
+
+    <AuthorizeView>
+        <Authorized>
+            <RadzenSidebar @bind-Expanded="@_sidebarExpanded">
+                <RadzenPanelMenu>
+                    <RadzenPanelMenuItem Path="" Text="Home" Icon="home" />
+                </RadzenPanelMenu>
+            </RadzenSidebar>
+        </Authorized>
+    </AuthorizeView>
+
+    <RadzenBody class="rz-p-4">
+        @Body
     </RadzenBody>
 </RadzenLayout>
 

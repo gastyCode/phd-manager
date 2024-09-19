@@ -48,8 +48,9 @@
         var result = await UserService.Login(UserLogin);
 
         if (result is null)
-    {
+        {
             _errorVisible = true;
+            return;
         }
         NavigationManager.NavigateTo("/");
     }

@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDManager.Web", "PhDManager.Web\PhDManager.Web.csproj", "{1418EF72-3F52-4A1C-B16D-8C101DE66FBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhDManager.Web", "PhDManager.Web\PhDManager.Web.csproj", "{1418EF72-3F52-4A1C-B16D-8C101DE66FBD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8FE62FFD-4641-48B7-BA74-2E6444188A9B} = {8FE62FFD-4641-48B7-BA74-2E6444188A9B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDManager.Api", "PhDManager.Api\PhDManager.Api.csproj", "{3111E21B-6D77-40C2-B23B-3E4D570DF0BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhDManager.Api", "PhDManager.Api\PhDManager.Api.csproj", "{3111E21B-6D77-40C2-B23B-3E4D570DF0BC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8FE62FFD-4641-48B7-BA74-2E6444188A9B} = {8FE62FFD-4641-48B7-BA74-2E6444188A9B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhDManager.Core", "PhDManager.Core\PhDManager.Core.csproj", "{8FE62FFD-4641-48B7-BA74-2E6444188A9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhDManager.Core", "PhDManager.Core\PhDManager.Core.csproj", "{8FE62FFD-4641-48B7-BA74-2E6444188A9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

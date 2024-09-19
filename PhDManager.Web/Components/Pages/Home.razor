@@ -3,13 +3,20 @@
 @using PhDManager.Core.Models
 @using PhDManager.Web.Services
 
+@inject NavigationManager NavigationManager
+
 <PageTitle>Home</PageTitle>
 
-<AuthorizeView>
-    <Authorized>
-        <RadzenText TextStyle="TextStyle.Body1">Welcome, @context.User.Identity?.Name</RadzenText>
-    </Authorized>
-    <NotAuthorized>
-        <RadzenText TextStyle="TextStyle.Body1">You are not logged in. <RadzenLink Path="/login">Please, click here to log in.</RadzenLink></RadzenText>
-    </NotAuthorized>
-</AuthorizeView>
+<RadzenStack style="min-height: 100%;" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0">
+    <AuthorizeView>
+        <Authorized>
+            <RadzenText TextStyle="TextStyle.H3">Welcome @context.User.Identity?.Name!</RadzenText>
+            <RadzenText TextStyle="TextStyle.Subtitle1">For navigation use sidebar.</RadzenText>
+        </Authorized>
+        <NotAuthorized>
+            <RadzenText TextStyle="TextStyle.H3">PhD Manager</RadzenText>
+            <RadzenText TextStyle="TextStyle.Subtitle1">Making your PhD studies easier.</RadzenText>
+            <RadzenButton Text="Log in" Click="@(() => NavigationManager.NavigateTo("login"))"></RadzenButton>
+        </NotAuthorized>
+    </AuthorizeView>
+</RadzenStack>
