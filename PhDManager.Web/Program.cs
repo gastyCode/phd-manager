@@ -1,5 +1,7 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using PhDManager.Core.IServices;
+using PhDManager.Core.Models;
 using PhDManager.Web.Components;
 using PhDManager.Web.Services;
 using Radzen;
@@ -12,22 +14,18 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddRadzenComponents();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.Cookie.Name = "auth_token";
-        options.LoginPath = "/login";
-        options.LogoutPath = "/logout";
-        options.AccessDeniedPath = "/";
-        options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
-    });
-builder.Services.AddAuthorization();
-builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddAuthorizationCore();
+
+builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AuthResponse>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
 builder.Services.AddHttpClient<IUserService, UserService>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:7013/");
 });
+
+builder.Services.AddBlazoredLocalStorage();
 
 var app = builder.Build();
 
@@ -43,9 +41,6 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

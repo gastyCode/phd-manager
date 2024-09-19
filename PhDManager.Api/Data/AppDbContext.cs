@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using MongoDB.EntityFrameworkCore.Extensions;
 using PhDManager.Core.Models;
 
-namespace PhDManager.Api.Contexts
+namespace PhDManager.Api.Data
 {
     public class AppDbContext : DbContext
     {

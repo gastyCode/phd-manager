@@ -1,10 +1,7 @@
 ﻿@page "/login"
 
-@using Microsoft.AspNetCore.Authentication.Cookies
-@using Microsoft.AspNetCore.Authentication
 @using PhDManager.Core.IServices
 @using PhDManager.Core.ValidationModels
-@using System.Security.Claims
 
 @inject IUserService UserService
 @inject NavigationManager NavigationManager
@@ -13,10 +10,14 @@
 
 <RadzenText TextStyle="TextStyle.H3">Login</RadzenText>
 
+<RadzenAlert @bind-Visible="@_errorVisible" AlertStyle="AlertStyle.Danger" Close="@OnClose">
+    The credentials you provided are invalid. Please try again.
+</RadzenAlert>
+
 <EditForm Model="UserLogin" FormName="login" OnSubmit="HandleSubmit">
     <RadzenStack>
-        <RadzenLabel For="@((UserLogin user) => user.Upn)" Text="Upn" Component="Upn" />
-        <RadzenTextBox @bind-Value="@UserLogin.Upn" Name="Upn" />
+        <RadzenLabel For="@((UserLogin user) => user.Username)" Text="Username" Component="Username" />
+        <RadzenTextBox @bind-Value="@UserLogin.Username" Name="Username" />
 
         <RadzenLabel For="@((UserLogin user) => user.Password)" Text="Password" Component="Password" />
         <RadzenPassword @bind-Value="@UserLogin.Password" Name="Password" />
@@ -27,29 +28,29 @@
 </EditForm>
 
 @code {
-    [CascadingParameter]
-    public HttpContext HttpContext { get; set; }
-
     [SupplyParameterFromForm]
-    private UserLogin? UserLogin { get; set; }
+    private UserLogin UserLogin { get; set; } = default!;
 
-    protected override void OnInitialized() => UserLogin ??= new();
+    protected override void OnInitialized()
+    {
+        UserLogin = new();
+    }
+
+    private bool _errorVisible = false;
+
+    public void OnClose()
+    {
+        _errorVisible = false;
+    }
 
     public async Task HandleSubmit()
     {
-        var result = await UserService.AuthenticateUser(UserLogin.Upn, UserLogin.Password);
-        if (result is not null)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, result.Upn),
-                new Claim(ClaimTypes.Role, result.Role)
-            };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        var result = await UserService.Login(UserLogin);
 
-            NavigationManager.NavigateTo("/");
+        if (result == false)
+        {
+            _errorVisible = true;
         }
+        NavigationManager.NavigateTo("/");
     }
 }

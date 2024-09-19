@@ -1,17 +1,15 @@
 ﻿@page "/"
+@using PhDManager.Core.IServices
+@using PhDManager.Core.Models
+@using PhDManager.Web.Services
 
 <PageTitle>Home</PageTitle>
 
 <AuthorizeView>
     <Authorized>
-        <RadzenText TextStyle="TextStyle.Body1">Welcome, you are logged in as <b>@HttpContext.User.Identity?.Name</b></RadzenText>
+        <RadzenText TextStyle="TextStyle.H3">Welcome, @context.User.Identity.Name</RadzenText>
     </Authorized>
     <NotAuthorized>
-        <RadzenText TextStyle="TextStyle.Body1">You are not logged in. <a href="/login" class="underline hover:opacity-80">Click here to log in.</a></RadzenText>
+        <RadzenText TextStyle="TextStyle.H3">Welcome, Guest</RadzenText>
     </NotAuthorized>
 </AuthorizeView>
-
-@code {
-    [CascadingParameter]
-    public HttpContext HttpContext { get; set; }
-}

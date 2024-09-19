@@ -13,8 +13,8 @@ namespace PhDManager.Core.Models
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public ObjectId Id { get; set; }
-        [BsonElement("upn")]
-        public string Upn { get; set; } = string.Empty;
+        [BsonElement("username")]
+        public string Username { get; set; } = string.Empty;
         [BsonElement("displayName")]
         public string DisplayName { get; set; } = string.Empty;
         [BsonElement("firstName")]

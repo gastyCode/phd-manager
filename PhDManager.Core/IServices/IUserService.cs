@@ -1,4 +1,5 @@
 ﻿using PhDManager.Core.Models;
+using PhDManager.Core.ValidationModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace PhDManager.Core.IServices
 {
     public interface IUserService
     {
-        Task<User?> AuthenticateUser(string username, string password);
+        Task<bool> Login(UserLogin userLogin);
     }
 }
