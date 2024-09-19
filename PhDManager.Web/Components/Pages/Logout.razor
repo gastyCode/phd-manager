@@ -1,20 +1,16 @@
 ﻿@page "/logout"
-
-@using Microsoft.AspNetCore.Authentication
+@using PhDManager.Core.IServices
+@using PhDManager.Web.Services
 
 @inject NavigationManager NavigationManager
+@inject IUserService UserService
 
 @code {
-    [CascadingParameter]
-    public HttpContext HttpContext { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        if (HttpContext.User.Identity.IsAuthenticated)
-        {
-            await HttpContext.SignOutAsync();
-            NavigationManager.NavigateTo("/");
-        }
+        await UserService.Logout();
+        
+        NavigationManager.NavigateTo("/");
     }
 }

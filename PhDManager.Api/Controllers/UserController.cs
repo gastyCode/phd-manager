@@ -21,11 +21,11 @@ namespace PhDManager.Api.Controllers
         private readonly IUserService _userService = userService;
         private readonly JwtOptions _options = options.Value;
 
-        [HttpPost("authenticate")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login(UserLogin userLogin)
         {
             var result = await _userService.Login(userLogin);
-            return result ? Ok(new AuthResponse() { Token = GenerateJwtToken(userLogin.Username) }) : Unauthorized();
+            return result is null ? Unauthorized() : Ok(new AuthResponse() { User = result, Token = GenerateJwtToken(result.Username) });
         }
 
         private string GenerateJwtToken(string username)
@@ -33,7 +33,8 @@ namespace PhDManager.Api.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, "User")
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));

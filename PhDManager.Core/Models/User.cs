@@ -12,7 +12,7 @@ namespace PhDManager.Core.Models
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
+        public string? Id { get; set; }
         [BsonElement("username")]
         public string Username { get; set; } = string.Empty;
         [BsonElement("displayName")]

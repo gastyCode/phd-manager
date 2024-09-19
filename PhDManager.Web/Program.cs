@@ -1,7 +1,6 @@
-using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Blazored.LocalStorage;
 using PhDManager.Core.IServices;
-using PhDManager.Core.Models;
 using PhDManager.Web.Components;
 using PhDManager.Web.Services;
 using Radzen;
@@ -17,7 +16,6 @@ builder.Services.AddRadzenComponents();
 builder.Services.AddAuthorizationCore();
 
 builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<AuthResponse>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
 builder.Services.AddHttpClient<IUserService, UserService>(client =>

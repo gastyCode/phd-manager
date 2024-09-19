@@ -14,7 +14,7 @@
     The credentials you provided are invalid. Please try again.
 </RadzenAlert>
 
-<EditForm Model="UserLogin" FormName="login" OnSubmit="HandleSubmit">
+<EditForm Model="UserLogin" FormName="login" OnSubmit="@HandleSubmit">
     <RadzenStack>
         <RadzenLabel For="@((UserLogin user) => user.Username)" Text="Username" Component="Username" />
         <RadzenTextBox @bind-Value="@UserLogin.Username" Name="Username" />
@@ -47,8 +47,8 @@
     {
         var result = await UserService.Login(UserLogin);
 
-        if (result == false)
-        {
+        if (result is null)
+    {
             _errorVisible = true;
         }
         NavigationManager.NavigateTo("/");

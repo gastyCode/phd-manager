@@ -7,9 +7,9 @@
 
 <AuthorizeView>
     <Authorized>
-        <RadzenText TextStyle="TextStyle.H3">Welcome, @context.User.Identity.Name</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body1">Welcome, @context.User.Identity?.Name</RadzenText>
     </Authorized>
     <NotAuthorized>
-        <RadzenText TextStyle="TextStyle.H3">Welcome, Guest</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body1">You are not logged in. <RadzenLink Path="/login">Please, click here to log in.</RadzenLink></RadzenText>
     </NotAuthorized>
 </AuthorizeView>

@@ -1,12 +1,10 @@
 ﻿using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json;
 using PhDManager.Core.IServices;
 using PhDManager.Core.Models;
 using PhDManager.Core.ValidationModels;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 
 namespace PhDManager.Web.Services
 {
@@ -16,30 +14,30 @@ namespace PhDManager.Web.Services
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly AuthenticationService _authenticationService = authenticationService;
 
-        public async Task<bool> Login(UserLogin userLogin)
+        public async Task<User?> Login(UserLogin userLogin)
         {
-            var json = JsonSerializer.Serialize(userLogin);
+            var json = JsonConvert.SerializeObject(userLogin);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("user/authenticate", data);
+            var response = await _httpClient.PostAsync("user/login", data);
 
-            if (!response.IsSuccessStatusCode) return false;
+            if (!response.IsSuccessStatusCode) return null;
 
             string result = await response.Content.ReadAsStringAsync();
-            var authResponse = JsonSerializer.Deserialize<AuthResponse>(result);
+            var authResponse = JsonConvert.DeserializeObject<AuthResponse>(result);
+            var user = authResponse?.User;
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResponse.Token);
+            await _localStorageService.SetItemAsync("authToken", authResponse?.Token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResponse?.Token);
 
-            var identity = new ClaimsIdentity(new[]
-            {
-                new Claim(ClaimTypes.Name, userLogin.Username),
-                new Claim("Token", authResponse.Token)
-            }, JwtBearerDefaults.AuthenticationScheme);
+            return user;
+        }
 
-            var user = new ClaimsPrincipal(identity);
-            _authenticationService.CurrentUser = user;
+        public async Task Logout()
+        {
+            await _localStorageService.RemoveItemAsync("authToken");
 
-            return true;
+            _httpClient.DefaultRequestHeaders.Authorization = null;
         }
     }
 }

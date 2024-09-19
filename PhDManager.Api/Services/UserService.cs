@@ -11,13 +11,12 @@ using PhDManager.Api.Data;
 
 namespace PhDManager.Api.Services
 {
-    public class UserService(AppDbContext context, IHttpContextAccessor httpContextAccessor, IOptions<ActiveDirectoryOptions> options) : IUserService
+    public class UserService(AppDbContext context, IOptions<ActiveDirectoryOptions> options) : IUserService
     {
         private readonly AppDbContext _context = context;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ActiveDirectoryOptions _options = options.Value;
 
-        public async Task<bool> Login(UserLogin userLogin)
+        public Task<User?> Login(UserLogin userLogin)
         {
             SearchResult result;
             try
@@ -32,7 +31,7 @@ namespace PhDManager.Api.Services
             }
             catch
             {
-                return false;
+                return Task.FromResult<User?>(null);
             }
 
             var user = _context.Users.FirstOrDefault(user => user.Username == userLogin.Username);
@@ -51,7 +50,12 @@ namespace PhDManager.Api.Services
                 _context.SaveChanges();
             }
 
-            return true;
+            return Task.FromResult<User?>(user);
+        }
+
+        public Task Logout()
+        {
+            throw new NotImplementedException();
         }
     }
 }

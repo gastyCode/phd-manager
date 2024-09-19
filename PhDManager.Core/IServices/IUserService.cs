@@ -10,6 +10,7 @@ namespace PhDManager.Core.IServices
 {
     public interface IUserService
     {
-        Task<bool> Login(UserLogin userLogin);
+        Task<User?> Login(UserLogin userLogin);
+        Task Logout();
     }
 }
