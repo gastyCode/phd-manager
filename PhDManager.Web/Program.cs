@@ -18,10 +18,12 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
-builder.Services.AddHttpClient<IUserService, UserService>(client =>
+builder.Services.AddScoped(sp => new HttpClient
 {
-    client.BaseAddress = new Uri("https://localhost:7013/");
+    BaseAddress = new Uri("http://phdmanager-api")
 });
+
+builder.Services.AddHttpClient<IUserService, UserService>();
 
 builder.Services.AddBlazoredLocalStorage();
 

@@ -11,8 +11,7 @@ namespace PhDManager.Core.Models
     public class User
     {
         [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public ObjectId _id { get; set; }
         [BsonElement("username")]
         public string Username { get; set; } = string.Empty;
         [BsonElement("displayName")]

@@ -1,13 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PhDManager.Core.IServices;
 using PhDManager.Core.Models;
 using PhDManager.Core.ValidationModels;
-using System.DirectoryServices;
-using System.Security.Claims;
+using LdapForNet;
+using LdapForNet.Native;
 using PhDManager.Api.Data;
+using static LdapForNet.Native.Native;
 
 namespace PhDManager.Api.Services
 {
@@ -16,23 +14,33 @@ namespace PhDManager.Api.Services
         private readonly AppDbContext _context = context;
         private readonly ActiveDirectoryOptions _options = options.Value;
 
-        public Task<User?> Login(UserLogin userLogin)
+        public async Task<User?> Login(UserLogin userLogin)
         {
-            SearchResult result;
+            IEnumerable<LdapEntry> entries;
+
             try
             {
-                DirectoryEntry entry = new(_options.LdapPath, userLogin.Username, userLogin.Password);
-                DirectorySearcher searcher = new(entry);
-                searcher.PropertiesToLoad.Add("cn");
-                searcher.PropertiesToLoad.Add("givenName");
-                searcher.PropertiesToLoad.Add("sn");
-                searcher.Filter = $"(&(uid={userLogin.Username}))";
-                result = searcher.FindOne();
+                using (var connection = new LdapConnection())
+                {
+
+                    connection.Connect(_options.LdapPath, 389, LdapSchema.LDAP);
+                    connection.SetOption(LdapOption.LDAP_OPT_REFERRALS, IntPtr.Zero);
+                    await connection.BindAsync(LdapAuthType.Simple, new LdapCredential
+                    {
+                        UserName = $"{userLogin.Username}@{_options.LdapPath}",
+                        Password = userLogin.Password
+                    });
+
+                    entries = await connection.SearchAsync("dc=fri,dc=uniza,dc=sk", $"(uid={userLogin.Username})");
+                }
             }
-            catch
+            catch (LdapException)
             {
-                return Task.FromResult<User?>(null);
+                return null;
             }
+
+            var result = entries?.FirstOrDefault();
+            if (result is null) return null;
 
             var user = _context.Users.FirstOrDefault(user => user.Username == userLogin.Username);
             if (user is null)
@@ -40,9 +48,9 @@ namespace PhDManager.Api.Services
                 user = new User
                 {
                     Username = userLogin.Username,
-                    DisplayName = result.Properties["cn"][0].ToString(),
-                    FirstName = result.Properties["givenName"][0].ToString(),
-                    LastName = result.Properties["sn"][0].ToString(),
+                    DisplayName = result.DirectoryAttributes["cn"].GetValue<string>(),
+                    FirstName = result.DirectoryAttributes["givenName"].GetValue<string>(),
+                    LastName = result.DirectoryAttributes["sn"].GetValue<string>(),
                     Role = "User"
                 };
 
@@ -50,7 +58,7 @@ namespace PhDManager.Api.Services
                 _context.SaveChanges();
             }
 
-            return Task.FromResult<User?>(user);
+            return user;
         }
 
         public Task Logout()
