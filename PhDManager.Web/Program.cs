@@ -15,15 +15,17 @@ builder.Services.AddRadzenComponents();
 
 builder.Services.AddAuthorizationCore();
 
-builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+HttpClientHandler clientHandler = new HttpClientHandler();
+clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
-builder.Services.AddScoped(sp => new HttpClient
+builder.Services.AddScoped(sp => new HttpClient(clientHandler)
 {
-    BaseAddress = new Uri("http://phdmanager-api")
+    BaseAddress = new Uri("https://phdmanager.api:8081")
 });
 
-builder.Services.AddHttpClient<IUserService, UserService>();
+builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddBlazoredLocalStorage();
 

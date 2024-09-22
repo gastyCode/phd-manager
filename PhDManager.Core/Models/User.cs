@@ -11,7 +11,8 @@ namespace PhDManager.Core.Models
     public class User
     {
         [BsonId]
-        public ObjectId _id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string _id { get; set; }
         [BsonElement("username")]
         public string Username { get; set; } = string.Empty;
         [BsonElement("displayName")]

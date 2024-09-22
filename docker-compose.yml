@@ -3,6 +3,7 @@ services:
     image: nginxproxy/nginx-proxy
     ports:
       - "80:80"
+      - "443:443" 
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     depends_on:
@@ -27,9 +28,9 @@ services:
       dockerfile: PhDManager.Web/Dockerfile
     ports:
       - "8080:8080"
-      - "8081:8081" 
+      - "8081:8081"
     environment:
-      - VIRTUAL_HOST=localhost
+      - VIRTUAL_HOST=web.local
       - VIRTUAL_PORT=8080
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
@@ -39,7 +40,6 @@ services:
 
   phdmanager.api:
     image: ${DOCKER_REGISTRY-}phdmanagerapi
-    container_name: phdmanager-api
     build:
       context: .
       dockerfile: PhDManager.Api/Dockerfile

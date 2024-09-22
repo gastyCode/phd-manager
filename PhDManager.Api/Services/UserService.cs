@@ -6,6 +6,7 @@ using LdapForNet;
 using LdapForNet.Native;
 using PhDManager.Api.Data;
 using static LdapForNet.Native.Native;
+using MongoDB.Bson;
 
 namespace PhDManager.Api.Services
 {
@@ -47,6 +48,7 @@ namespace PhDManager.Api.Services
             {
                 user = new User
                 {
+                    _id = ObjectId.GenerateNewId().ToString(),
                     Username = userLogin.Username,
                     DisplayName = result.DirectoryAttributes["cn"].GetValue<string>(),
                     FirstName = result.DirectoryAttributes["givenName"].GetValue<string>(),
