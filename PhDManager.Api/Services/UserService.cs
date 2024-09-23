@@ -3,7 +3,6 @@ using PhDManager.Core.IServices;
 using PhDManager.Core.Models;
 using PhDManager.Core.ValidationModels;
 using LdapForNet;
-using LdapForNet.Native;
 using PhDManager.Api.Data;
 using static LdapForNet.Native.Native;
 using MongoDB.Bson;
