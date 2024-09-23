@@ -21,16 +21,16 @@ namespace PhDManager.Api.Controllers
         public async Task<IActionResult> Login(UserLogin userLogin)
         {
             var result = await _userService.Login(userLogin);
-            return result is null ? Unauthorized() : Ok(new AuthResponse() { User = result, Token = GenerateJwtToken(result.Username) });
+            return result is null ? Unauthorized() : Ok(new AuthResponse() { User = result, Token = GenerateJwtToken(result) });
         }
 
-        private string GenerateJwtToken(string username)
+        private string GenerateJwtToken(User user)
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));

@@ -11,6 +11,6 @@
         await base.OnInitializedAsync();
         await UserService.Logout();
         
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/", true);
     }
 }

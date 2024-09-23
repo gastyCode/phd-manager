@@ -1,0 +1,13 @@
+﻿@page "/admin-panel"
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>Admin Panel</PageTitle>
+
+<RadzenStack>
+    <RadzenText TextStyle="TextStyle.H3">Admin Panel</RadzenText>
+    <RadzenText TextStyle="TextStyle.Subtitle1">Welcome to the admin panel.</RadzenText>
+</RadzenStack>
+
+@code {
+    
+}
