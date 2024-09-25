@@ -12,9 +12,10 @@
                             <RadzenSidebarToggle Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
                         </Authorized>
                     </AuthorizeView>
-
                     <RadzenLink Text="PhD Manager" Path="/" />
                 </RadzenStack>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
+                    <CultureSelect />
                     <AuthorizeView>
                         <Authorized>
                             <RadzenMenu>
@@ -27,6 +28,7 @@
                             <RadzenLink class="rz-mx-2" Path="/login">Log in</RadzenLink>
                         </NotAuthorized>
                     </AuthorizeView>
+                </RadzenStack>
             </RadzenRow>
         </RadzenStack>
     </RadzenHeader>

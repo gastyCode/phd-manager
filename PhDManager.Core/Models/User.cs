@@ -13,7 +13,7 @@ namespace PhDManager.Core.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string _id { get; set; }
+        public string? _id { get; set; }
         [BsonElement("username")]
         public string Username { get; set; } = string.Empty;
         [BsonElement("displayName")]
@@ -24,5 +24,8 @@ namespace PhDManager.Core.Models
         public string LastName { get; set; } = string.Empty;
         [BsonElement("role")]
         public string Role { get; set; } = string.Empty;
+        [BsonElement("firstLogin")]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime? FirstLogin { get; set; }
     }
 }

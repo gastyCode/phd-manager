@@ -40,6 +40,13 @@ namespace PhDManager.Web.Services
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
 
+            
+            if (!IsValid(jsonToken))
+            {
+                await _localStorageService.RemoveItemAsync("authToken");
+                return new ClaimsPrincipal(new ClaimsIdentity());
+            }
+
             var claims = new List<Claim>(new[] {
                     new Claim(ClaimTypes.Name, jsonToken?.Claims.First(claim => claim.Type == "sub").Value),
                     new Claim(ClaimTypes.Role, jsonToken?.Claims.First(claim => claim.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value)
@@ -47,6 +54,14 @@ namespace PhDManager.Web.Services
 
             var identity = new ClaimsIdentity(claims, "jwt");
             return new ClaimsPrincipal(identity);
+        }
+
+        private bool IsValid(JwtSecurityToken token)
+        {
+            var expiration = long.Parse(token?.Claims.First(claim => claim.Type == "exp").Value);
+            var expirationDate = DateTimeOffset.FromUnixTimeSeconds(expiration).UtcDateTime;
+
+            return expirationDate >= DateTime.UtcNow;
         }
     }
 }

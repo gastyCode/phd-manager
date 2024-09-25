@@ -41,7 +41,8 @@ namespace PhDManager.Api.Controllers
                 _options.Audience,
                 claims,
                 expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
+                signingCredentials: creds
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

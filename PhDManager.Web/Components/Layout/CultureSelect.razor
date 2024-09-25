@@ -1,0 +1,36 @@
+@using System.Globalization
+@using Blazored.LocalStorage
+
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigation
+
+<RadzenDropDown TValue="CultureInfo" TextProperty="@nameof(CultureInfo.DisplayName)" @bind-Value="@Culture" Data="@_supportedCultures" />
+
+@code {
+    private CultureInfo[] _supportedCultures = new[]
+    {
+        new CultureInfo("sk-SK"),
+        new CultureInfo("en-US")
+    };
+
+    protected override void OnInitialized()
+    {
+        Culture = CultureInfo.CurrentCulture;
+    }
+
+    private CultureInfo Culture
+    {
+        get => CultureInfo.CurrentCulture;
+        set
+        {
+            if (CultureInfo.CurrentCulture != value)
+            {
+                var uri = new Uri(Navigation.Uri).GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+                var cultureEscaped = Uri.EscapeDataString(value.Name);
+                var uriEscaped = Uri.EscapeDataString(uri);
+
+                Navigation.NavigateTo($"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}", forceLoad: true);
+            }
+        }
+    }
+}

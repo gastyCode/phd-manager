@@ -52,7 +52,8 @@ namespace PhDManager.Api.Services
                     DisplayName = result.DirectoryAttributes["cn"].GetValue<string>(),
                     FirstName = result.DirectoryAttributes["givenName"].GetValue<string>(),
                     LastName = result.DirectoryAttributes["sn"].GetValue<string>(),
-                    Role = "User"
+                    Role = "User",
+                    FirstLogin = DateTime.Now
                 };
 
                 _context.Users.Add(user);

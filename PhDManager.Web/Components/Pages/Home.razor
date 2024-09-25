@@ -1,17 +1,19 @@
 ﻿@page "/"
 @using PhDManager.Core.IServices
 @using PhDManager.Core.Models
+@using PhDManager.Web.Locales
 @using PhDManager.Web.Services
 
+@inject IStringLocalizer<Resources> Localizer
 @inject NavigationManager NavigationManager
 
-<PageTitle>Home</PageTitle>
+<PageTitle>@Localizer["Home"]</PageTitle>
 
 <RadzenStack style="min-height: 100%;" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0">
     <AuthorizeView>
         <Authorized>
-            <RadzenText TextStyle="TextStyle.H3">Welcome @context.User.Identity?.Name!</RadzenText>
-            <RadzenText TextStyle="TextStyle.Subtitle1">For navigation use sidebar.</RadzenText>
+            <RadzenText TextStyle="TextStyle.H3">@(string.Format(Localizer["WelcomeTitle"], context.User.Identity?.Name))</RadzenText>
+            <RadzenText TextStyle="TextStyle.Subtitle1">@Localizer["WelcomeText"]</RadzenText>
         </Authorized>
         <NotAuthorized>
             <RadzenText TextStyle="TextStyle.H3">PhD Manager</RadzenText>
