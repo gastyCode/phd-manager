@@ -1,7 +1,5 @@
 @using System.Globalization
-@using Blazored.LocalStorage
 
-@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigation
 
 <RadzenDropDown TValue="CultureInfo" TextProperty="@nameof(CultureInfo.DisplayName)" @bind-Value="@Culture" Data="@_supportedCultures" />

@@ -1,32 +1,22 @@
 using Microsoft.AspNetCore.Components.Authorization;
-using Blazored.LocalStorage;
 using PhDManager.Core.IServices;
 using PhDManager.Web.Components;
 using PhDManager.Web.Services;
 using Radzen;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
+
+HttpClientHandler clientHandler = new HttpClientHandler();
+clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddRadzenComponents();
-builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddLocalization();
-//builder.Services.AddAuthentication()
-//    .AddScheme<AuthenticationSchemeOptions, CustomAuthenticationHandler>("JWT Scheme", options => { });
-
-HttpClientHandler clientHandler = new HttpClientHandler();
-clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-
-builder.Services.AddScoped(sp => new HttpClient(clientHandler)
-{
-    BaseAddress = new Uri("https://phdmanager.api:8081")
-});
-
+builder.Services.AddScoped(sp => new HttpClient(clientHandler) { BaseAddress = new Uri("https://phdmanager.api:8081") });
 builder.Services.AddScoped<PhDManager.Web.Services.AuthenticationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -66,6 +56,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+    .AddInteractiveServerRenderMode()
+    .AllowAnonymous();
 
 app.Run();
