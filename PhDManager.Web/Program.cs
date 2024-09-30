@@ -4,6 +4,7 @@ using PhDManager.Web.Components;
 using PhDManager.Web.Services;
 using Radzen;
 using Microsoft.AspNetCore.Localization;
+using Blazored.LocalStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +16,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddRadzenComponents();
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddLocalization();
 builder.Services.AddScoped(sp => new HttpClient(clientHandler) { BaseAddress = new Uri("https://phdmanager.api:8081") });
-builder.Services.AddScoped<PhDManager.Web.Services.AuthenticationService>();
+builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserService, UserService>();
 

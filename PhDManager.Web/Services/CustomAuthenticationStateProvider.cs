@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -7,15 +7,15 @@ namespace PhDManager.Web.Services
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
-        private readonly ProtectedLocalStorage _protectedLocalStorage;
+        private readonly ILocalStorageService _localStorageService;
         private readonly AuthenticationService _authenticationService;
         private AuthenticationState _authenticationState;
 
-        public CustomAuthenticationStateProvider(AuthenticationService authenticationService, ProtectedLocalStorage protectedLocalStorage)
+        public CustomAuthenticationStateProvider(AuthenticationService authenticationService, ILocalStorageService localStorageService)
         {
             _authenticationState = new AuthenticationState(authenticationService.CurrentUser ?? new());
             _authenticationService = authenticationService;
-            _protectedLocalStorage = protectedLocalStorage;
+            _localStorageService = localStorageService;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -30,22 +30,20 @@ namespace PhDManager.Web.Services
 
         private async Task<ClaimsPrincipal?> GetUser()
         {
-            var result = await _protectedLocalStorage.GetAsync<string>("authToken");
+            var token = await _localStorageService.GetItemAsync<string>("authToken");
 
-            if (!result.Success)
+            if (string.IsNullOrWhiteSpace(token))
             {
                 return new ClaimsPrincipal(new ClaimsIdentity());
             }
 
-            
-            var token = result.Value;
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
 
             
             if (!IsValid(jsonToken))
             {
-                await _protectedLocalStorage.DeleteAsync("authToken");
+                await _localStorageService.RemoveItemAsync("authToken");
                 return new ClaimsPrincipal(new ClaimsIdentity());
             }
 

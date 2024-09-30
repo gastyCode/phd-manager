@@ -3,17 +3,22 @@
 <RadzenComponents @rendermode="InteractiveServer" />
 
 <RadzenLayout>
+
     <RadzenHeader>
         <RadzenStack style="height: 100%" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0">
             <RadzenRow class="rz-p-1" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width: 100%;">
+
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
                     <AuthorizeView>
                         <Authorized>
                             <RadzenSidebarToggle Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
                         </Authorized>
                     </AuthorizeView>
-                    <RadzenLink Text="PhD Manager" Path="/" />
+                    <RadzenLink Path="/">
+                        <RadzenImage Path="uniza_logo.png" Style="height: 50px" />
+                    </RadzenLink>
                 </RadzenStack>
+
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
                     <CultureSelect />
                     <AuthorizeView>
@@ -29,6 +34,7 @@
                         </NotAuthorized>
                     </AuthorizeView>
                 </RadzenStack>
+
             </RadzenRow>
         </RadzenStack>
     </RadzenHeader>
@@ -37,6 +43,7 @@
         <Authorized>
             <RadzenSidebar @bind-Expanded="@_sidebarExpanded">
                 <RadzenPanelMenu>
+
                     <AuthorizeView Roles="Admin" Context="adminContext">
                         <Authorized>
                             <RadzenPanelMenuItem Path="admin-panel" Text="Admin Panel" Icon="admin_panel_settings" />
@@ -44,6 +51,7 @@
                     </AuthorizeView>
 
                     <RadzenPanelMenuItem Path="" Text="Home" Icon="home" />
+
                 </RadzenPanelMenu>
             </RadzenSidebar>
         </Authorized>
@@ -52,6 +60,7 @@
     <RadzenBody class="rz-p-4">
         @Body
     </RadzenBody>
+
 </RadzenLayout>
 
 @code {
