@@ -5,7 +5,6 @@ using PhDManager.Core.ValidationModels;
 using LdapForNet;
 using PhDManager.Api.Data;
 using static LdapForNet.Native.Native;
-using MongoDB.Bson;
 
 namespace PhDManager.Api.Services
 {
@@ -47,13 +46,13 @@ namespace PhDManager.Api.Services
             {
                 user = new User
                 {
-                    _id = ObjectId.GenerateNewId().ToString(),
+                    Id = int.Parse(result.DirectoryAttributes["uidNumber"].GetValue<string>()),
                     Username = userLogin.Username,
                     DisplayName = result.DirectoryAttributes["cn"].GetValue<string>(),
                     FirstName = result.DirectoryAttributes["givenName"].GetValue<string>(),
                     LastName = result.DirectoryAttributes["sn"].GetValue<string>(),
                     Role = "User",
-                    FirstLogin = DateTime.Now
+                    FirstLogin = DateTime.UtcNow
                 };
 
                 _context.Users.Add(user);

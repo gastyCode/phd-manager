@@ -11,10 +11,11 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContextPool<AppDbContext>(options =>
 {
-    options.UseMongoDB(builder.Configuration.GetSection(DatabaseOptions.Database).Get<DatabaseOptions>().ConnectionString,
-        builder.Configuration.GetSection(DatabaseOptions.Database).Get<DatabaseOptions>().DatabaseName);
+    options
+        .UseNpgsql(builder.Configuration.GetSection(DatabaseOptions.Database).Get<DatabaseOptions>().ConnectionString)
+        .UseSnakeCaseNamingConvention();
 });
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.Jwt));

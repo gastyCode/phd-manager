@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MongoDB.Bson" Version="2.28.0" />
-    <PackageReference Include="System.DirectoryServices" Version="8.0.0" />
-  </ItemGroup>
-
 </Project>
