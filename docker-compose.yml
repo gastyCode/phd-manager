@@ -17,9 +17,10 @@ services:
     environment:
       POSTGRES_PASSWORD: phdmanager
       POSTGRES_DB: phdmanager
-      PGDATA: /var/lib/postgresql/data
     ports:
       - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
     networks:
       - app-network
 

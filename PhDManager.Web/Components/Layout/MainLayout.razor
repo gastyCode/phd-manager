@@ -42,7 +42,7 @@
     <AuthorizeView>
         <Authorized>
             <RadzenSidebar @bind-Expanded="@_sidebarExpanded">
-                <RadzenPanelMenu>
+                <RadzenPanelMenu DisplayStyle="@(_sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
 
                     <AuthorizeView Roles="Admin" Context="adminContext">
                         <Authorized>
