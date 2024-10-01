@@ -5,6 +5,7 @@ using PhDManager.Core.ValidationModels;
 using LdapForNet;
 using PhDManager.Api.Data;
 using static LdapForNet.Native.Native;
+using Microsoft.EntityFrameworkCore;
 
 namespace PhDManager.Api.Services
 {
@@ -13,25 +14,37 @@ namespace PhDManager.Api.Services
         private readonly AppDbContext _context = context;
         private readonly ActiveDirectoryOptions _options = options.Value;
 
+        public async Task DeleteUser(int id)
+        {
+            var user = await GetUser(id);
+
+            if (user is null) return;
+
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+        }
+
+        public async Task<User?> GetUser(int id) => await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+
+        public async Task<List<User>?> GetUsers() => await _context.Users.ToListAsync();
+
         public async Task<User?> Login(UserLogin userLogin)
         {
             IEnumerable<LdapEntry> entries;
 
             try
             {
-                using (var connection = new LdapConnection())
+                using var connection = new LdapConnection();
+
+                connection.Connect(_options.LdapPath, 389, LdapSchema.LDAP);
+                connection.SetOption(LdapOption.LDAP_OPT_REFERRALS, IntPtr.Zero);
+                await connection.BindAsync(LdapAuthType.Simple, new LdapCredential
                 {
+                    UserName = $"{userLogin.Username}@{_options.LdapPath}",
+                    Password = userLogin.Password
+                });
 
-                    connection.Connect(_options.LdapPath, 389, LdapSchema.LDAP);
-                    connection.SetOption(LdapOption.LDAP_OPT_REFERRALS, IntPtr.Zero);
-                    await connection.BindAsync(LdapAuthType.Simple, new LdapCredential
-                    {
-                        UserName = $"{userLogin.Username}@{_options.LdapPath}",
-                        Password = userLogin.Password
-                    });
-
-                    entries = await connection.SearchAsync("dc=fri,dc=uniza,dc=sk", $"(uid={userLogin.Username})");
-                }
+                entries = await connection.SearchAsync("dc=fri,dc=uniza,dc=sk", $"(uid={userLogin.Username})");
             }
             catch (LdapException)
             {

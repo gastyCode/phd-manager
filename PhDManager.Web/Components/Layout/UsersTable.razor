@@ -1,0 +1,34 @@
+﻿@using PhDManager.Core.IServices
+@using PhDManager.Core.Models
+
+@inject IUserService UserService
+
+<RadzenDataGrid Data="@_users" TItem="User">
+    <Columns>
+        <RadzenDataGridColumn Width="60px">
+            <Template Context="user">
+                <RadzenButton Click="@(() => DeleteUser(user))">X</RadzenButton>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(User.Id)" Title="Id" />
+        <RadzenDataGridColumn Property="@nameof(User.Username)" Title="Username" />
+        <RadzenDataGridColumn Property="@nameof(User.FirstName)" Title="First Name" />
+        <RadzenDataGridColumn Property="@nameof(User.LastName)" Title="Last Name" />
+        <RadzenDataGridColumn Property="@nameof(User.Role)" Title="Role" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    private List<User>? _users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _users = await UserService.GetUsers();
+    }
+
+    private async void DeleteUser(User user)
+    {
+        await UserService.DeleteUser(user.Id);
+        _users = await UserService.GetUsers();
+    }
+}

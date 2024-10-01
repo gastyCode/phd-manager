@@ -7,5 +7,8 @@ namespace PhDManager.Core.IServices
     {
         Task<User?> Login(UserLogin userLogin);
         Task Logout();
+        Task<User?> GetUser(int id);
+        Task<List<User>?> GetUsers();
+        Task DeleteUser(int id);
     }
 }

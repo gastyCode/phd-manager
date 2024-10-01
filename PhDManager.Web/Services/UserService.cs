@@ -14,6 +14,30 @@ namespace PhDManager.Web.Services
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly AuthenticationService _authenticationService = authenticationService;
 
+        public async Task DeleteUser(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"user/{id}");
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<User?> GetUser(int id)
+        {
+            var response = await _httpClient.GetAsync($"user/{id}");
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<User?>(responseBody);
+        }
+
+        public async Task<List<User>?> GetUsers()
+        {
+            var response = await _httpClient.GetAsync($"user");
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<List<User>?>(responseBody);
+        }
+
         public async Task<User?> Login(UserLogin userLogin)
         {
             var json = JsonConvert.SerializeObject(userLogin);
@@ -36,7 +60,6 @@ namespace PhDManager.Web.Services
         public async Task Logout()
         {
             await _localStorageService.RemoveItemAsync("authToken");
-
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }
     }

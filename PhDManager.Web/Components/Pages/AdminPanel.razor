@@ -1,12 +1,28 @@
 ﻿@page "/admin-panel"
+
+@using PhDManager.Web.Components.Layout
+
 @attribute [Authorize(Roles = "Admin")]
 
 <PageTitle>Admin Panel</PageTitle>
 
-<RadzenStack>
-    <RadzenText TextStyle="TextStyle.H3">Admin Panel</RadzenText>
-    <RadzenText TextStyle="TextStyle.Subtitle1">Welcome to the admin panel.</RadzenText>
-</RadzenStack>
+<RadzenTabs>
+    <Tabs>
+
+        <RadzenTabsItem Text="Users">
+            <UsersTable />
+        </RadzenTabsItem>
+
+        <RadzenTabsItem Text="Subjects">
+            <RadzenText>Subjects</RadzenText>
+        </RadzenTabsItem>
+
+        <RadzenTabsItem Text="Thesis">
+            <RadzenText>Thesis</RadzenText>
+        </RadzenTabsItem>
+
+    </Tabs>
+</RadzenTabs>
 
 @code {
     

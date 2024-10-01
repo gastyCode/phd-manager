@@ -18,7 +18,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddRadzenComponents();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddLocalization();
-builder.Services.AddScoped(sp => new HttpClient(clientHandler) { BaseAddress = new Uri("https://phdmanager.api:8081") });
+
+builder.Services.AddSingleton(sp => new HttpClient(clientHandler) { BaseAddress = new Uri("https://phdmanager.api:8081") });
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserService, UserService>();
