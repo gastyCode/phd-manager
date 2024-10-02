@@ -8,11 +8,10 @@ using System.Text;
 
 namespace PhDManager.Web.Services
 {
-    public class UserService(HttpClient httpClient, ILocalStorageService localStorageService , AuthenticationService authenticationService) : IUserService
+    public class UserService(HttpClient httpClient, ILocalStorageService localStorageService) : IUserService
     {
         private readonly HttpClient _httpClient = httpClient;
         private readonly ILocalStorageService _localStorageService = localStorageService;
-        private readonly AuthenticationService _authenticationService = authenticationService;
 
         public async Task DeleteUser(int id)
         {
@@ -52,15 +51,10 @@ namespace PhDManager.Web.Services
             var user = authResponse?.User;
 
             await _localStorageService.SetItemAsync("authToken", authResponse?.Token);
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authResponse?.Token);
-
+            
             return user;
         }
 
-        public async Task Logout()
-        {
-            await _localStorageService.RemoveItemAsync("authToken");
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-        }
+        public async Task Logout() => await _localStorageService.RemoveItemAsync("authToken");
     }
 }

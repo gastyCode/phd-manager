@@ -1,6 +1,8 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using PhDManager.Core.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace PhDManager.Web.Services
@@ -8,21 +10,20 @@ namespace PhDManager.Web.Services
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
         private readonly ILocalStorageService _localStorageService;
-        private readonly AuthenticationService _authenticationService;
         private AuthenticationState _authenticationState;
+        private HttpClient _httpClient;
 
-        public CustomAuthenticationStateProvider(AuthenticationService authenticationService, ILocalStorageService localStorageService)
+        public CustomAuthenticationStateProvider(ILocalStorageService localStorageService, HttpClient httpClient)
         {
-            _authenticationState = new AuthenticationState(authenticationService.CurrentUser ?? new());
-            _authenticationService = authenticationService;
+            _authenticationState = new AuthenticationState(new());
             _localStorageService = localStorageService;
+            _httpClient = httpClient;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var user = await GetUser();
 
-            _authenticationService.CurrentUser = user;
             _authenticationState = new AuthenticationState(user);
 
             return _authenticationState;
@@ -46,6 +47,8 @@ namespace PhDManager.Web.Services
                 await _localStorageService.RemoveItemAsync("authToken");
                 return new ClaimsPrincipal(new ClaimsIdentity());
             }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var claims = new List<Claim>(new[] {
                     new Claim(ClaimTypes.Name, jsonToken?.Claims.First(claim => claim.Type == "sub").Value),

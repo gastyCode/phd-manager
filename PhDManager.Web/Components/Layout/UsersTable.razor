@@ -7,7 +7,7 @@
     <Columns>
         <RadzenDataGridColumn Width="60px">
             <Template Context="user">
-                <RadzenButton Click="@(() => DeleteUser(user))">X</RadzenButton>
+                <RadzenButton Click="@(() => DeleteUser(user))" Icon="delete" ButtonStyle="ButtonStyle.Danger" />
             </Template>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn Property="@nameof(User.Id)" Title="Id" />
