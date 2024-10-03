@@ -10,7 +10,7 @@
                 <RadzenButton Click="@(() => DeleteUser(user))" Icon="delete" ButtonStyle="ButtonStyle.Danger" />
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="@nameof(User.Id)" Title="Id" />
+        <RadzenDataGridColumn Property="@nameof(User.UserId)" Title="Id" />
         <RadzenDataGridColumn Property="@nameof(User.Username)" Title="Username" />
         <RadzenDataGridColumn Property="@nameof(User.FirstName)" Title="First Name" />
         <RadzenDataGridColumn Property="@nameof(User.LastName)" Title="Last Name" />
@@ -28,7 +28,7 @@
 
     private async void DeleteUser(User user)
     {
-        await UserService.DeleteUser(user.Id);
+        await UserService.DeleteUser(user.UserId);
         _users = await UserService.GetUsers();
     }
 }

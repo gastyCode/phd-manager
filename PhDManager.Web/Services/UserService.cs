@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using PhDManager.Core.IServices;
 using PhDManager.Core.Models;
 using PhDManager.Core.ValidationModels;
-using System.Net.Http.Headers;
 using System.Text;
 
 namespace PhDManager.Web.Services
@@ -30,7 +29,7 @@ namespace PhDManager.Web.Services
 
         public async Task<List<User>?> GetUsers()
         {
-            var response = await _httpClient.GetAsync($"user");
+            var response = await _httpClient.GetAsync("user");
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
 

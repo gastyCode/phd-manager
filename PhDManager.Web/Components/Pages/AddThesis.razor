@@ -1,0 +1,55 @@
+﻿@page "/thesis/add"
+
+@using PhDManager.Core.IServices
+@using PhDManager.Core.Models
+@using PhDManager.Core.ValidationModels
+
+@attribute [Authorize(Roles = $"{nameof(Role.Admin)}, {nameof(Role.Teacher)}")]
+
+@inject IThesisService ThesisService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Add Thesis</PageTitle>
+
+<EditForm Model="ThesisData" FormName="add-thesis" OnSubmit="@HandleSubmit">
+    <AntiforgeryToken />
+
+    <RadzenStack>
+        <RadzenLabel For="@((ThesisData thesis) => thesis.Title)" Text="Title" Component="Title" />
+        <RadzenTextBox @bind-Value="@ThesisData.Title" Name="Title" />
+
+        <RadzenLabel For="@((ThesisData thesis) => thesis.Description)" Text="Description" Component="Description" />
+        <RadzenTextArea @bind-Value="@ThesisData.Description" Name="Description" />
+
+
+        <RadzenButton Text="Add" ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Primary" />
+    </RadzenStack>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public ThesisData ThesisData { get; private set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        ThesisData = new();
+    }
+
+    public async Task HandleSubmit()
+    {
+        var thesis = new Thesis
+            {
+                // TODO: Thesis ID autogenerate
+                Title = ThesisData.Title,
+                Description = ThesisData.Description,
+                Year = DateTime.Now.Year,
+                // TODO: access current user ID
+                StudentId = null,
+                OpponentId = null
+            };
+
+        await ThesisService.CreateThesis(thesis);
+
+        NavigationManager.NavigateTo("thesis");
+    }
+}

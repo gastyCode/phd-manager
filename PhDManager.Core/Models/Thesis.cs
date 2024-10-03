@@ -2,12 +2,12 @@
 {
     public class Thesis
     {
-        public int Id { get; set; }
+        public int ThesisId { get; set; }
         public int Year { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string Student { get; set; } = string.Empty;
-        public string Supervisor { get; set; } = string.Empty;
-        public string Opponent { get; set; } = string.Empty;
+        public int? StudentId { get; set; }
+        public int SupervisorId { get; set; }
+        public int? OpponentId { get; set; }
     }
 }

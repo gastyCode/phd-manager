@@ -1,8 +1,9 @@
 ﻿@page "/admin-panel"
 
 @using PhDManager.Web.Components.Layout
+@using PhDManager.Core.Models
 
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = $"{nameof(Role.Admin)}")]
 
 <PageTitle>Admin Panel</PageTitle>
 

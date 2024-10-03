@@ -22,6 +22,7 @@ builder.Services.AddLocalization();
 builder.Services.AddSingleton(sp => new HttpClient(clientHandler) { BaseAddress = new Uri("https://phdmanager.api:8081") });
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IThesisService, ThesisService>();
 
 var app = builder.Build();
 

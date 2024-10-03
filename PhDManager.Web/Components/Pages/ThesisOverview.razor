@@ -1,0 +1,32 @@
+﻿@page "/thesis/{ThesisId:int}"
+
+@using PhDManager.Core.IServices
+@using PhDManager.Core.Models
+
+@inject IThesisService ThesisService
+
+<PageTitle>Thesis Overview</PageTitle>
+
+@if (_thesis == null)
+{
+    <RadzenText>Loading...</RadzenText>
+}
+else
+{
+    <RadzenCard>
+        <RadzenText TextStyle="TextStyle.H3">@_thesis?.Title</RadzenText>
+        <RadzenText>@_thesis?.Description</RadzenText>
+    </RadzenCard>
+}
+
+@code {
+    [Parameter]
+    public int ThesisId { get; set; }
+
+    private Thesis? _thesis;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _thesis = await ThesisService.GetThesis(ThesisId);
+    }
+}

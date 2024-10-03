@@ -21,10 +21,10 @@ namespace PhDManager.Api.Services
             if (user is null) return;
 
             _context.Users.Remove(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<User?> GetUser(int id) => await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+        public async Task<User?> GetUser(int id) => await _context.Users.SingleOrDefaultAsync(u => u.UserId == id);
 
         public async Task<List<User>?> GetUsers() => await _context.Users.ToListAsync();
 
@@ -59,17 +59,17 @@ namespace PhDManager.Api.Services
             {
                 user = new User
                 {
-                    Id = int.Parse(result.DirectoryAttributes["uidNumber"].GetValue<string>()),
+                    UserId = int.Parse(result.DirectoryAttributes["uidNumber"].GetValue<string>()),
                     Username = userLogin.Username,
                     DisplayName = result.DirectoryAttributes["cn"].GetValue<string>(),
                     FirstName = result.DirectoryAttributes["givenName"].GetValue<string>(),
                     LastName = result.DirectoryAttributes["sn"].GetValue<string>(),
-                    Role = "User",
+                    Role = nameof(Role.Student),
                     FirstLogin = DateTime.UtcNow
                 };
 
                 _context.Users.Add(user);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
             return user;

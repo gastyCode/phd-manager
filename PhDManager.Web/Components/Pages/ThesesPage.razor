@@ -1,0 +1,57 @@
+﻿@page "/thesis"
+@using PhDManager.Core.IServices
+@using PhDManager.Core.Models
+
+@attribute [Authorize]
+
+@inject IThesisService ThesisService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Thesis Selection</PageTitle>
+
+<AuthorizeView Roles=@($"{nameof(Role.Admin)}, {nameof(Role.Teacher)}")>
+    <Authorized>
+        <RadzenButton Click="@NewThesis">Add new thesis</RadzenButton>
+    </Authorized>
+</AuthorizeView>
+
+<RadzenDataList Data="@_theses" TItem="Thesis">
+    <Template Context="thesis">
+        <RadzenRow>
+            <RadzenColumn Size="12">
+                <RadzenCard Style="width: 100%">
+                    <RadzenRow>
+                        <RadzenColumn Size="12">
+                            <RadzenText TextStyle="TextStyle.H3">@thesis.Title</RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12">
+                            <RadzenText>@thesis.Description</RadzenText>
+                        </RadzenColumn>
+                        <RadzenColumn Size="12">
+                            <RadzenButton Text="Select" Click="@(() => SelectThesis(thesis.ThesisId))" />
+                        </RadzenColumn>
+                    </RadzenRow>
+                </RadzenCard>
+            </RadzenColumn>
+        </RadzenRow>
+    </Template>
+</RadzenDataList>
+
+@code {
+    private List<Thesis>? _theses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _theses = await ThesisService.GetTheses();
+    }
+
+    private void SelectThesis(int thesisId)
+    {
+        NavigationManager.NavigateTo($"/thesis/{thesisId}");
+    }
+
+    private void NewThesis()
+    {
+        NavigationManager.NavigateTo("/thesis/add");
+    }
+}
