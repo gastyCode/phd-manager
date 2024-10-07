@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 docker/postgres/data
+.DS_Store
