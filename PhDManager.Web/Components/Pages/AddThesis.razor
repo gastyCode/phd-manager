@@ -27,25 +27,29 @@
 </EditForm>
 
 @code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
     [SupplyParameterFromForm]
     public ThesisData ThesisData { get; private set; } = default!;
 
-    protected override void OnInitialized()
+    private AuthenticationState _authenticationState = default!;
+
+    protected override async Task OnInitializedAsync()
     {
         ThesisData = new();
+        _authenticationState = await AuthenticationStateTask;
     }
 
     public async Task HandleSubmit()
     {
         var thesis = new Thesis
             {
-                // TODO: Thesis ID autogenerate
                 Title = ThesisData.Title,
                 Description = ThesisData.Description,
                 Year = DateTime.Now.Year,
-                // TODO: access current user ID
-                StudentId = null,
-                OpponentId = null
+                SupervisorId = int.Parse(_authenticationState.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value),
+                StudentId = null
             };
 
         await ThesisService.CreateThesis(thesis);

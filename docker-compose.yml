@@ -47,8 +47,8 @@ services:
       context: .
       dockerfile: PhDManager.Api/Dockerfile
     ports:
-      - "5000:8080"
-      - "5001:8081"
+      - "8180:8080"
+      - "8181:8081"
     depends_on:
       - phdmanager.db
     networks:

@@ -52,6 +52,7 @@ namespace PhDManager.Web.Services
 
             var claims = new List<Claim>(new[] {
                     new Claim(ClaimTypes.Name, jsonToken?.Claims.First(claim => claim.Type == "sub").Value),
+                    new Claim(ClaimTypes.NameIdentifier, jsonToken?.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value),
                     new Claim(ClaimTypes.Role, jsonToken?.Claims.First(claim => claim.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value)
                 });
 

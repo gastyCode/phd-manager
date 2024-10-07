@@ -17,23 +17,18 @@
 
 <RadzenDataList Data="@_theses" TItem="Thesis">
     <Template Context="thesis">
-        <RadzenRow>
-            <RadzenColumn Size="12">
-                <RadzenCard Style="width: 100%">
-                    <RadzenRow>
-                        <RadzenColumn Size="12">
-                            <RadzenText TextStyle="TextStyle.H3">@thesis.Title</RadzenText>
-                        </RadzenColumn>
-                        <RadzenColumn Size="12">
-                            <RadzenText>@thesis.Description</RadzenText>
-                        </RadzenColumn>
-                        <RadzenColumn Size="12">
-                            <RadzenButton Text="Select" Click="@(() => SelectThesis(thesis.ThesisId))" />
-                        </RadzenColumn>
-                    </RadzenRow>
-                </RadzenCard>
-            </RadzenColumn>
-        </RadzenRow>
+        <RadzenStack>
+            <RadzenText TextStyle="TextStyle.H4">@thesis.Title</RadzenText>
+            <RadzenStack Gap="0">
+                <RadzenText TextStyle="TextStyle.H5">Description</RadzenText>
+                <RadzenText>@thesis.Description</RadzenText>
+            </RadzenStack>
+            <RadzenStack Gap="0">
+                <RadzenText TextStyle="TextStyle.H5">Supervisor</RadzenText>
+                <RadzenText>@thesis.SupervisorId</RadzenText>
+            </RadzenStack>
+            <RadzenButton Text="Select" Click="@(() => SelectThesis(thesis.ThesisId))" />
+        </RadzenStack>
     </Template>
 </RadzenDataList>
 
