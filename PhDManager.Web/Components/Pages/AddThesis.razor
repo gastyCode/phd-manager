@@ -7,6 +7,7 @@
 @attribute [Authorize(Roles = $"{nameof(Role.Admin)}, {nameof(Role.Teacher)}")]
 
 @inject IThesisService ThesisService
+@inject IUserService UserService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Add Thesis</PageTitle>
@@ -48,8 +49,8 @@
                 Title = ThesisData.Title,
                 Description = ThesisData.Description,
                 Year = DateTime.Now.Year,
-                SupervisorId = int.Parse(_authenticationState.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value),
-                StudentId = null
+                Supervisor = await UserService.GetUser(new Guid(_authenticationState.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value)),
+                Student = null
             };
 
         await ThesisService.CreateThesis(thesis);

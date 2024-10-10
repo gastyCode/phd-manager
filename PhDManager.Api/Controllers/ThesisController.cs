@@ -21,7 +21,7 @@ namespace PhDManager.Api.Controllers
 
         [Authorize]
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteThesis(int id)
+        public async Task<IActionResult> DeleteThesis(Guid id)
         {
             await _thesisService.DeleteThesis(id);
             return NoContent();
@@ -33,7 +33,7 @@ namespace PhDManager.Api.Controllers
 
         [Authorize]
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Thesis>> GetThesis(int id)
+        public async Task<ActionResult<Thesis>> GetThesis(Guid id)
         {
             var thesis = await _thesisService.GetThesis(id);
 
@@ -44,7 +44,7 @@ namespace PhDManager.Api.Controllers
 
         [Authorize]
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateThesis(int id, Thesis thesis)
+        public async Task<IActionResult> UpdateThesis(Guid id, Thesis thesis)
         {
             await _thesisService.UpdateThesis(id, thesis);
             return NoContent();
@@ -52,10 +52,10 @@ namespace PhDManager.Api.Controllers
 
         [Authorize]
         [HttpGet("student/{studentId:int}")]
-        public async Task<ActionResult<List<Thesis>?>> GetThesesByStudent(int studentId) => await _thesisService.GetThesesByStudent(studentId);
+        public async Task<ActionResult<List<Thesis>?>> GetThesesByStudent(Guid studentId) => await _thesisService.GetThesesByStudent(studentId);
 
         [Authorize]
         [HttpGet("supervisor/{supervisorId:int}")]
-        public async Task<ActionResult<List<Thesis>?>> GetThesesBySupervisor(int supervisorId) => await _thesisService.GetThesesBySupervisor(supervisorId);
+        public async Task<ActionResult<List<Thesis>?>> GetThesesBySupervisor(Guid supervisorId) => await _thesisService.GetThesesBySupervisor(supervisorId);
     }
 }

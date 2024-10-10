@@ -4,14 +4,14 @@ namespace PhDManager.Core.IServices
 {
     public interface IThesisService
     {
-        Task<Thesis?> GetThesis(int id);
+        Task<Thesis?> GetThesis(Guid id);
         Task<List<Thesis>?> GetTheses();
-        Task<List<Thesis>?> GetThesesByStudent(int studentId);
-        Task<List<Thesis>?> GetThesesBySupervisor(int supervisorId);
-        Task<List<Thesis>?> GetThesesByStudyProgram(int studyProgramId);
-        Task<List<Thesis>?> GetThesesBySubject(int subjectId);
+        Task<List<Thesis>?> GetThesesByStudent(Guid studentId);
+        Task<List<Thesis>?> GetThesesBySupervisor(Guid supervisorId);
+        Task<List<Thesis>?> GetThesesByStudyProgram(Guid studyProgramId);
+        Task<List<Thesis>?> GetThesesBySubject(Guid subjectId);
         Task CreateThesis(Thesis thesis);
-        Task UpdateThesis(int id, Thesis thesis);
-        Task DeleteThesis(int id);
+        Task UpdateThesis(Guid id, Thesis thesis);
+        Task DeleteThesis(Guid id);
     }
 }

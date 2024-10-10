@@ -27,7 +27,7 @@ namespace PhDManager.Api.Controllers
 
         [Authorize]
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUser(Guid id)
         {
             var user = await _userService.GetUser(id);
 
@@ -42,7 +42,7 @@ namespace PhDManager.Api.Controllers
 
         [Authorize]
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(Guid id)
         {
             await _userService.DeleteUser(id);
             return NoContent();
