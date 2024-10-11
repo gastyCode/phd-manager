@@ -14,7 +14,7 @@ namespace PhDManager.Api.Services
         private readonly AppDbContext _context = context;
         private readonly ActiveDirectoryOptions _options = options.Value;
 
-        public async Task DeleteUser(Guid id)
+        public async Task DeleteUser(int id)
         {
             var user = await GetUser(id);
 
@@ -24,7 +24,7 @@ namespace PhDManager.Api.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User?> GetUser(Guid id) => await _context.Users.SingleOrDefaultAsync(u => u.UserId == id);
+        public async Task<User?> GetUser(int id) => await _context.Users.SingleOrDefaultAsync(u => u.UserId == id);
 
         public async Task<List<User>?> GetUsers() => await _context.Users.ToListAsync();
 

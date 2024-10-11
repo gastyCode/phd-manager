@@ -18,7 +18,7 @@ namespace PhDManager.Web.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task DeleteThesis(Guid id)
+        public async Task DeleteThesis(int id)
         {
             var response = await _httpClient.DeleteAsync($"thesis/{id}");
             response.EnsureSuccessStatusCode();
@@ -33,35 +33,7 @@ namespace PhDManager.Web.Services
             return JsonConvert.DeserializeObject<List<Thesis>?>(responseBody);
         }
 
-        public async Task<List<Thesis>?> GetThesesByStudent(Guid studentId)
-        {
-            var response = await _httpClient.GetAsync($"thesis/student/{studentId}");
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<List<Thesis>?>(responseBody);
-        }
-
-        public Task<List<Thesis>?> GetThesesByStudyProgram(Guid studyProgramId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Thesis>?> GetThesesBySubject(Guid subjectId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Thesis>?> GetThesesBySupervisor(Guid supervisorId)
-        {
-            var response = await _httpClient.GetAsync($"thesis/supervisor/{supervisorId}");
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<List<Thesis>?>(responseBody);
-        }
-
-        public async Task<Thesis?> GetThesis(Guid id)
+        public async Task<Thesis?> GetThesis(int id)
         {
             var response = await _httpClient.GetAsync($"thesis/{id}");
             response.EnsureSuccessStatusCode();
@@ -70,7 +42,7 @@ namespace PhDManager.Web.Services
             return JsonConvert.DeserializeObject<Thesis?>(responseBody);
         }
 
-        public async Task UpdateThesis(Guid id, Thesis thesis)
+        public async Task UpdateThesis(int id, Thesis thesis)
         {
             var json = JsonConvert.SerializeObject(thesis);
             var data = new StringContent(json, Encoding.UTF8, "application/json");

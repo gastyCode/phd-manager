@@ -1,6 +1,5 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using PhDManager.Core.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -9,9 +8,9 @@ namespace PhDManager.Web.Services
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
-        private readonly ILocalStorageService _localStorageService;
         private AuthenticationState _authenticationState;
-        private HttpClient _httpClient;
+        private readonly ILocalStorageService _localStorageService;
+        private readonly HttpClient _httpClient;
 
         public CustomAuthenticationStateProvider(ILocalStorageService localStorageService, HttpClient httpClient)
         {
@@ -52,6 +51,7 @@ namespace PhDManager.Web.Services
 
             var claims = new List<Claim>(new[] {
                     new Claim(ClaimTypes.Name, jsonToken?.Claims.First(claim => claim.Type == "sub").Value),
+                    new Claim(ClaimTypes.Sid, jsonToken?.Claims.First(claim => claim.Type == "jti").Value),
                     new Claim(ClaimTypes.NameIdentifier, jsonToken?.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value),
                     new Claim(ClaimTypes.Role, jsonToken?.Claims.First(claim => claim.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value)
                 });

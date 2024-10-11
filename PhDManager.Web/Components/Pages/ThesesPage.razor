@@ -25,7 +25,7 @@
             </RadzenStack>
             <RadzenStack Gap="0">
                 <RadzenText TextStyle="TextStyle.H5">Supervisor</RadzenText>
-                <RadzenText>@thesis.Supervisor.DisplayName</RadzenText>
+                <RadzenText>@thesis.User?.DisplayName</RadzenText>
             </RadzenStack>
             <RadzenButton Text="Select" Click="@(() => SelectThesis(thesis.ThesisId))" />
         </RadzenStack>
@@ -40,7 +40,7 @@
         _theses = await ThesisService.GetTheses();
     }
 
-    private void SelectThesis(Guid thesisId)
+    private void SelectThesis(int thesisId)
     {
         NavigationManager.NavigateTo($"/thesis/{thesisId}");
     }

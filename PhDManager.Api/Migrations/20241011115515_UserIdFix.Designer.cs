@@ -12,8 +12,8 @@ using PhDManager.Api.Data;
 namespace PhDManager.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241010165132_init")]
-    partial class init
+    [Migration("20241011115515_UserIdFix")]
+    partial class UserIdFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,10 +27,12 @@ namespace PhDManager.Api.Migrations
 
             modelBuilder.Entity("PhDManager.Core.Models.StudyProgram", b =>
                 {
-                    b.Property<Guid>("StudyProgramId")
+                    b.Property<int>("StudyProgramId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("integer")
                         .HasColumnName("study_program_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("StudyProgramId"));
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -50,10 +52,12 @@ namespace PhDManager.Api.Migrations
 
             modelBuilder.Entity("PhDManager.Core.Models.Subject", b =>
                 {
-                    b.Property<Guid>("SubjectId")
+                    b.Property<int>("SubjectId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("integer")
                         .HasColumnName("subject_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SubjectId"));
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -74,39 +78,34 @@ namespace PhDManager.Api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("semester");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
                     b.HasKey("SubjectId")
                         .HasName("pk_subjects");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_subjects_user_id");
 
                     b.ToTable("subjects", (string)null);
                 });
 
             modelBuilder.Entity("PhDManager.Core.Models.Thesis", b =>
                 {
-                    b.Property<Guid>("ThesisId")
+                    b.Property<int>("ThesisId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("integer")
                         .HasColumnName("thesis_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ThesisId"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<Guid>("SupervisorUserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("supervisor_user_id");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("title");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
                     b.Property<int>("Year")
                         .HasColumnType("integer")
@@ -115,18 +114,20 @@ namespace PhDManager.Api.Migrations
                     b.HasKey("ThesisId")
                         .HasName("pk_theses");
 
-                    b.HasIndex("SupervisorUserId")
-                        .HasDatabaseName("ix_theses_supervisor_user_id");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_theses_user_id");
 
                     b.ToTable("theses", (string)null);
                 });
 
             modelBuilder.Entity("PhDManager.Core.Models.User", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("integer")
                         .HasColumnName("user_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -152,13 +153,10 @@ namespace PhDManager.Api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("role");
 
-                    b.Property<Guid?>("StudentId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("student_id");
-
-                    b.Property<Guid?>("StudyProgramId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("study_program_id");
+                    b.Property<string>("Uid")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("uid");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -168,99 +166,24 @@ namespace PhDManager.Api.Migrations
                     b.HasKey("UserId")
                         .HasName("pk_users");
 
-                    b.HasIndex("StudentId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_users_student_id");
-
-                    b.HasIndex("StudyProgramId")
-                        .HasDatabaseName("ix_users_study_program_id");
-
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("StudyProgramSubject", b =>
+            modelBuilder.Entity("PhDManager.Core.Models.Thesis", b =>
                 {
-                    b.Property<Guid>("StudyProgramId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("study_program_id");
-
-                    b.Property<Guid>("SubjectsSubjectId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("subjects_subject_id");
-
-                    b.HasKey("StudyProgramId", "SubjectsSubjectId")
-                        .HasName("pk_study_program_subject");
-
-                    b.HasIndex("SubjectsSubjectId")
-                        .HasDatabaseName("ix_study_program_subject_subjects_subject_id");
-
-                    b.ToTable("study_program_subject", (string)null);
-                });
-
-            modelBuilder.Entity("PhDManager.Core.Models.Subject", b =>
-                {
-                    b.HasOne("PhDManager.Core.Models.User", null)
-                        .WithMany("Subjects")
+                    b.HasOne("PhDManager.Core.Models.User", "User")
+                        .WithMany("Theses")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("fk_subjects_users_user_id");
-                });
-
-            modelBuilder.Entity("PhDManager.Core.Models.Thesis", b =>
-                {
-                    b.HasOne("PhDManager.Core.Models.User", "Supervisor")
-                        .WithMany("CreatedTheses")
-                        .HasForeignKey("SupervisorUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_theses_users_supervisor_user_id");
+                        .HasConstraintName("fk_theses_users_user_id");
 
-                    b.Navigation("Supervisor");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PhDManager.Core.Models.User", b =>
                 {
-                    b.HasOne("PhDManager.Core.Models.Thesis", "Thesis")
-                        .WithOne("Student")
-                        .HasForeignKey("PhDManager.Core.Models.User", "StudentId")
-                        .HasConstraintName("fk_users_theses_student_id");
-
-                    b.HasOne("PhDManager.Core.Models.StudyProgram", "StudyProgram")
-                        .WithMany()
-                        .HasForeignKey("StudyProgramId")
-                        .HasConstraintName("fk_users_study_programs_study_program_id");
-
-                    b.Navigation("StudyProgram");
-
-                    b.Navigation("Thesis");
-                });
-
-            modelBuilder.Entity("StudyProgramSubject", b =>
-                {
-                    b.HasOne("PhDManager.Core.Models.StudyProgram", null)
-                        .WithMany()
-                        .HasForeignKey("StudyProgramId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_study_program_subject_study_programs_study_program_id");
-
-                    b.HasOne("PhDManager.Core.Models.Subject", null)
-                        .WithMany()
-                        .HasForeignKey("SubjectsSubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_study_program_subject_subjects_subjects_subject_id");
-                });
-
-            modelBuilder.Entity("PhDManager.Core.Models.Thesis", b =>
-                {
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("PhDManager.Core.Models.User", b =>
-                {
-                    b.Navigation("CreatedTheses");
-
-                    b.Navigation("Subjects");
+                    b.Navigation("Theses");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,13 +12,13 @@ namespace PhDManager.Web.Services
         private readonly HttpClient _httpClient = httpClient;
         private readonly ILocalStorageService _localStorageService = localStorageService;
 
-        public async Task DeleteUser(Guid id)
+        public async Task DeleteUser(int id)
         {
             var response = await _httpClient.DeleteAsync($"user/{id}");
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<User?> GetUser(Guid id)
+        public async Task<User?> GetUser(int id)
         {
             var response = await _httpClient.GetAsync($"user/{id}");
             response.EnsureSuccessStatusCode();

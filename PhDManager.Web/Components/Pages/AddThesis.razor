@@ -3,6 +3,7 @@
 @using PhDManager.Core.IServices
 @using PhDManager.Core.Models
 @using PhDManager.Core.ValidationModels
+@using System.Security.Claims
 
 @attribute [Authorize(Roles = $"{nameof(Role.Admin)}, {nameof(Role.Teacher)}")]
 
@@ -44,13 +45,14 @@
 
     public async Task HandleSubmit()
     {
+        var claims = _authenticationState.User.Identity as ClaimsIdentity;
+        var id = int.Parse(claims.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid").Value);
         var thesis = new Thesis
             {
                 Title = ThesisData.Title,
                 Description = ThesisData.Description,
                 Year = DateTime.Now.Year,
-                Supervisor = await UserService.GetUser(new Guid(_authenticationState.User.Claims.First(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").Value)),
-                Student = null
+                UserId = id
             };
 
         await ThesisService.CreateThesis(thesis);

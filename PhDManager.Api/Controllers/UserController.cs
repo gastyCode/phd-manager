@@ -27,7 +27,7 @@ namespace PhDManager.Api.Controllers
 
         [Authorize]
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
+        public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _userService.GetUser(id);
 
@@ -42,7 +42,7 @@ namespace PhDManager.Api.Controllers
 
         [Authorize]
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
             await _userService.DeleteUser(id);
             return NoContent();
@@ -53,8 +53,8 @@ namespace PhDManager.Api.Controllers
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, user.UserId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Uid.ToString()),
                 new Claim(ClaimTypes.Role, user.Role)
             };
 
