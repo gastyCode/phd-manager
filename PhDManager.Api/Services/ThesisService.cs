@@ -25,9 +25,9 @@ namespace PhDManager.Api.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Thesis>?> GetTheses() => await _context.Theses.ToListAsync();
+        public async Task<List<Thesis>?> GetTheses() => await _context.Theses.Include(t => t.User).ToListAsync();
 
-        public async Task<Thesis?> GetThesis(int id) => await _context.Theses.SingleOrDefaultAsync(t => t.ThesisId == id);
+        public async Task<Thesis?> GetThesis(int id) => await _context.Theses.Include(t => t.User).SingleOrDefaultAsync(t => t.ThesisId == id);
 
         public async Task UpdateThesis(int id, Thesis thesis)
         {
