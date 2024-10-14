@@ -11,11 +11,7 @@
             <RadzenRow class="rz-p-1" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width: 100%;">
 
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-                    <AuthorizeView>
-                        <Authorized>
-                            <RadzenSidebarToggle Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
-                        </Authorized>
-                    </AuthorizeView>
+                    <RadzenSidebarToggle Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
                     <RadzenLink Path="/">
                         <RadzenImage Path="uniza_logo.png" Style="height: 50px" />
                     </RadzenLink>
@@ -41,24 +37,20 @@
         </RadzenStack>
     </RadzenHeader>
 
-    <AuthorizeView>
-        <Authorized>
-            <RadzenSidebar @bind-Expanded="@_sidebarExpanded">
-                <RadzenPanelMenu DisplayStyle="@(_sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
+    <RadzenSidebar @bind-Expanded="@_sidebarExpanded">
+        <RadzenPanelMenu DisplayStyle="@(_sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
 
-                    <AuthorizeView Roles=@($"{nameof(Role.Admin)}") Context="adminContext">
-                        <Authorized>
-                            <RadzenPanelMenuItem Path="admin-panel" Text="Admin Panel" Icon="admin_panel_settings" />
-                        </Authorized>
-                    </AuthorizeView>
+            <AuthorizeView Roles=@($"{nameof(Role.Admin)}")>
+                <Authorized>
+                    <RadzenPanelMenuItem Path="admin-panel" Text="Admin Panel" Icon="admin_panel_settings" />
+                </Authorized>
+            </AuthorizeView>
 
-                    <RadzenPanelMenuItem Path="" Text="Home" Icon="home" />
-                    <RadzenPanelMenuItem Path="thesis" Text="Thesis Selection" Icon="assignment" />
+            <RadzenPanelMenuItem Path="" Text="Home" Icon="home" />
+            <RadzenPanelMenuItem Path="theses" Text="Thesis Selection" Icon="assignment" />
 
-                </RadzenPanelMenu>
-            </RadzenSidebar>
-        </Authorized>
-    </AuthorizeView>
+        </RadzenPanelMenu>
+    </RadzenSidebar>
 
     <RadzenBody class="rz-p-4">
         @Body

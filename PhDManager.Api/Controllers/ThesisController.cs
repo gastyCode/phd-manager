@@ -27,11 +27,9 @@ namespace PhDManager.Api.Controllers
             return NoContent();
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<Thesis>?>> GetTheses() => await _thesisService.GetTheses();
 
-        [Authorize]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Thesis>> GetThesis(int id)
         {

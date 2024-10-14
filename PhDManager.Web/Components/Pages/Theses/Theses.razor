@@ -1,31 +1,39 @@
-﻿@page "/thesis"
+﻿@page "/theses"
 @using PhDManager.Core.IServices
 @using PhDManager.Core.Models
-
-@attribute [Authorize]
 
 @inject IThesisService ThesisService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Thesis Selection</PageTitle>
 
+<RadzenRow>
+    <RadzenColumn>
+        <RadzenFormField Text="Search">
+            <RadzenTextBox />
+        </RadzenFormField>
+    </RadzenColumn>
+</RadzenRow>
+
 <AuthorizeView Roles=@($"{nameof(Role.Admin)}, {nameof(Role.Teacher)}")>
     <Authorized>
-        <RadzenButton Click="@NewThesis">Add new thesis</RadzenButton>
+        <RadzenRow>
+            <RadzenButton Click="@NewThesis">Add new thesis</RadzenButton>
+        </RadzenRow>
     </Authorized>
 </AuthorizeView>
 
 <RadzenDataList Data="@_theses" TItem="Thesis">
     <Template Context="thesis">
         <RadzenStack>
-            <RadzenText TextStyle="TextStyle.H4">@thesis.Title</RadzenText>
-            <RadzenStack Gap="0">
-                <RadzenText TextStyle="TextStyle.H5">Description</RadzenText>
-                <RadzenText>@thesis.Description</RadzenText>
+            <RadzenText TextStyle="TextStyle.H5">@thesis.Title</RadzenText>
+            <RadzenStack Gap="6" Orientation="Orientation.Horizontal">
+                <RadzenIcon Icon="description" />
+                <RadzenText TextStyle="TextStyle.Body1">@thesis.Description</RadzenText>
             </RadzenStack>
-            <RadzenStack Gap="0">
-                <RadzenText TextStyle="TextStyle.H5">Supervisor</RadzenText>
-                <RadzenText>@thesis.User?.DisplayName</RadzenText>
+            <RadzenStack Gap="6" Orientation="Orientation.Horizontal">
+                <RadzenIcon Icon="face" />
+                <RadzenText TextStyle="TextStyle.Body1">@thesis.User?.DisplayName</RadzenText>
             </RadzenStack>
             <RadzenButton Text="Select" Click="@(() => SelectThesis(thesis.ThesisId))" />
         </RadzenStack>
