@@ -1,3 +1,21 @@
 ﻿.underline {
     text-decoration: underline #ffc300 0.5rem;
 }
+
+.circle {
+    background-color: var(--rz-primary);
+    opacity: 50%;
+    border-radius: 50%;
+    width: 90%;
+    height: 60%;
+    display: inline-block;
+    position: absolute;
+    left: 56%;
+    bottom: 0;
+    transform: translate(-50%, 10%);
+    z-index: -1;
+}
+
+.image-container {
+    position: relative;
+}

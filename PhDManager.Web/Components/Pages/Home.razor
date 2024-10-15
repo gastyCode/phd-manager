@@ -1,4 +1,5 @@
 ﻿@page "/"
+
 @using PhDManager.Core.IServices
 @using PhDManager.Core.Models
 @using PhDManager.Web.Locales
@@ -24,7 +25,10 @@
                     <RadzenButton Text="Search Theses" Click="@(() => NavigationManager.NavigateTo("theses"))"></RadzenButton>
                 </RadzenColumn>
                 <RadzenColumn Size="4">
-                    <RadzenImage Path="digital-nomad.svg" />
+                    <div class="image-container">
+                        <RadzenImage Path="digital-nomad.svg" />
+                        <div class="circle"></div>
+                    </div>
                 </RadzenColumn>
             </RadzenRow>
         </NotAuthorized>
