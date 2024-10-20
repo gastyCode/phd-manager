@@ -19,20 +19,18 @@
             <RadzenText TextStyle="TextStyle.Subtitle1">@Localizer["WelcomeText"]</RadzenText>
         </Authorized>
         <NotAuthorized>
-            <RadzenRow class="full-size" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center">
-                <RadzenColumn Size="4">
+            <div class="full-size responsive-row">
+                <div>
                     <RadzenText TextStyle="TextStyle.H2" Style="font-weight: 600;">Make your study <span class="underline">easier</span></RadzenText>
                     <RadzenText TextStyle="TextStyle.H3" Style="color: dimgray;">Join now and see the difference!</RadzenText>
-                    <RadzenButton Text="Log In" Click="@(() => NavigationManager.NavigateTo("login"))"></RadzenButton>
-                    <RadzenButton Text="Search Theses" Click="@(() => NavigationManager.NavigateTo("theses"))"></RadzenButton>
-                </RadzenColumn>
-                <RadzenColumn Size="4">
-                    <div class="container-image">
-                        <div class="circle-image"></div>
-                        <RadzenImage Path="digital-nomad.svg" />
-                    </div>
-                </RadzenColumn>
-            </RadzenRow>
+                    <RadzenButton class="rz-my-2" Text="Log In" Click="@(() => NavigationManager.NavigateTo("login"))"></RadzenButton>
+                    <RadzenButton class="rz-my-2" Text="Search Theses" Click="@(() => NavigationManager.NavigateTo("theses"))"></RadzenButton>
+                </div>
+                <div class="container-image landing-basis">
+                    <div class="circle-image"></div>
+                    <RadzenImage class="full-size" Path="digital-nomad.svg" />
+                </div>
+            </div>
         </NotAuthorized>
     </AuthorizeView>
 </RadzenStack>

@@ -7,18 +7,10 @@
 
 <PageTitle>Thesis Selection</PageTitle>
 
-<RadzenRow>
-    <RadzenColumn>
-        <RadzenFormField Text="Search">
-            <RadzenTextBox />
-        </RadzenFormField>
-    </RadzenColumn>
-</RadzenRow>
-
 <AuthorizeView Roles=@($"{nameof(Role.Admin)}, {nameof(Role.Teacher)}")>
     <Authorized>
         <RadzenRow>
-            <RadzenButton Click="@NewThesis">Add new thesis</RadzenButton>
+            <RadzenButton class="rz-m-4" Click="@NewThesis">Add new thesis</RadzenButton>
         </RadzenRow>
     </Authorized>
 </AuthorizeView>
@@ -50,11 +42,11 @@
 
     private void SelectThesis(int thesisId)
     {
-        NavigationManager.NavigateTo($"/thesis/{thesisId}");
+        NavigationManager.NavigateTo($"/theses/{thesisId}");
     }
 
     private void NewThesis()
     {
-        NavigationManager.NavigateTo("/thesis/add");
+        NavigationManager.NavigateTo("/theses/add");
     }
 }

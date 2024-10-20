@@ -7,25 +7,31 @@
 <RadzenLayout>
 
     <RadzenHeader>
-        <RadzenStack style="height: 100%" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0">
-            <RadzenRow class="rz-p-1" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center" Style="width: 100%;">
+        <RadzenStack class="height-full" Orientation="Orientation.Vertical" JustifyContent="JustifyContent.Center" AlignItems="AlignItems.Center" Gap="0">
+            <RadzenRow>
+                <CultureSelect />
+            </RadzenRow>
+            
+            <RadzenRow class="rz-p-1 width-full" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
 
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
-                    <RadzenSidebarToggle Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
+                    <RadzenSidebarToggle class="margin-none" Click="@(() => _sidebarExpanded = !_sidebarExpanded)" />
                     <RadzenLink Path="/">
-                        <RadzenImage Path="uniza_logo.png" Style="height: 50px" />
+                        <RadzenImage Path="uniza_logo.png" class="logo-size" />
                     </RadzenLink>
                 </RadzenStack>
 
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center">
-                    <CultureSelect />
                     <AuthorizeView>
                         <Authorized>
-                            <RadzenMenu>
-                                <RadzenMenuItem Text="@context.User.Identity?.Name">
-                                    <RadzenMenuItem Text="Log out" Path="logout"></RadzenMenuItem>
-                                </RadzenMenuItem>
-                            </RadzenMenu>
+                            <RadzenProfileMenu>
+                                <Template>
+                                    <RadzenText class="text-color-base" TextStyle="TextStyle.Button">@context.User.Identity?.Name</RadzenText>
+                                </Template>
+                                <ChildContent>
+                                    <RadzenProfileMenuItem Text="Log out" Path="logout"></RadzenProfileMenuItem>
+                                </ChildContent>
+                            </RadzenProfileMenu>
                         </Authorized>
                         <NotAuthorized>
                             <RadzenLink class="rz-mx-2" Path="/login">Log in</RadzenLink>
@@ -37,7 +43,7 @@
         </RadzenStack>
     </RadzenHeader>
 
-    <RadzenSidebar @bind-Expanded="@_sidebarExpanded">
+    <RadzenSidebar Responsive="false" class="absolute width-fit" @bind-Expanded="@_sidebarExpanded">
         <RadzenPanelMenu DisplayStyle="@(_sidebarExpanded ? MenuItemDisplayStyle.IconAndText : MenuItemDisplayStyle.Icon)" ShowArrow="false">
 
             <AuthorizeView Roles=@($"{nameof(Role.Admin)}")>
@@ -59,5 +65,5 @@
 </RadzenLayout>
 
 @code {
-    private bool _sidebarExpanded = true;
+    private bool _sidebarExpanded = false;
 }

@@ -2,7 +2,12 @@
 
 @inject NavigationManager Navigation
 
-<RadzenDropDown TValue="CultureInfo" TextProperty="@nameof(CultureInfo.DisplayName)" @bind-Value="@Culture" Data="@_supportedCultures" />
+<RadzenStack Orientation="Orientation.Horizontal">
+    @foreach (var culture in _supportedCultures)
+    {
+        <RadzenButton Variant="Variant.Flat" Click="@(() => Culture = culture)">@culture.CompareInfo.Name</RadzenButton>
+    }
+</RadzenStack>
 
 @code {
     private CultureInfo[] _supportedCultures = new[]
